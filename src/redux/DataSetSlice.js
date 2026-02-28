@@ -4,10 +4,10 @@ import Papa from "papaparse"
 // get the data in asyncThunk
 export const getDataSet = createAsyncThunk('communities/fetchData', async (args, thunkAPI) => {
   try{
-    const response = await fetch('data/communities.csv');
+    const response = await fetch('data/Participants.csv');
     const responseText = await response.text();
     console.log("loaded file length:" + responseText.length);
-    const responseJson = Papa.parse(responseText,{header:true, dynamicTyping:true});
+    const responseJson = Papa.parse(responseText,{header:true, dynamicTyping:true, skipEmptyLines: true});
 
     // you can also dispatch any other reducer
     // thunkAPI.dispatch(reducerAction(params))

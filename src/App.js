@@ -1,19 +1,20 @@
 import './App.css';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getDataSet } from './redux/DataSetSlice';
+import ParallelCoordinatesContainer from './components/parallelCoordinates/ParallelCoordinatesContainer';
 
-// here import other dependencies
-
-// a component is a piece of code which render a part of the user interface
 function App() {
-  // every time the component re-render
-  useEffect(()=>{
-      console.log("App useEffect (called each time App re-renders)");
-  }); // if no second parameter, useEffect is called at each re-render
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+      dispatch(getDataSet()); 
+  }, [dispatch]); 
 
   return (
     <div className="App">
         <div id={"MultiviewContainer"} className={"row"}>
-          
+            <ParallelCoordinatesContainer />
         </div>
     </div>
   );
