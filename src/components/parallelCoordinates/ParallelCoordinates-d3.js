@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 
 class ParallelCoordinatesD3 {
-    margin = {top: 40, right: 10, bottom: 10, left: 0};
+    margin = {top: 50, right: 40, bottom: 40, left: 40};
     size; height; width; svg;
 
     constructor(el){
@@ -20,9 +20,9 @@ class ParallelCoordinatesD3 {
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
     }
 
-    renderVis = function (visData) {
-        if (!visData || visData.length === 0) return;
-        this.svg.selectAll("*").remove();
+    renderVis = function (filteredData, fullData) {
+        if (!fullData || fullData.length === 0) return;
+        this.svg.selectAll("*").remove(); 
 
         const dimensions = ["householdSize", "haveKids", "age", "educationLevel", "joviality"];
 
@@ -33,12 +33,13 @@ class ParallelCoordinatesD3 {
         const y = {};
         for (let i in dimensions) {
             let name = dimensions[i];
-            if (typeof visData[0][name] === "number") {
+            
+            if (typeof fullData[0][name] === "number") {
                 y[name] = d3.scaleLinear()
-                    .domain(d3.extent(visData, d => +d[name]))
+                    .domain(d3.extent(fullData, d => +d[name]))
                     .range([this.height, 0]);
             } else {
-                const categories = Array.from(new Set(visData.map(d => d[name])));
+                const categories = Array.from(new Set(fullData.map(d => d[name])));
                 y[name] = d3.scalePoint()
                     .domain(categories)
                     .range([this.height, 0]);
@@ -57,7 +58,7 @@ class ParallelCoordinatesD3 {
         }
 
         this.svg.selectAll(".myPath")
-            .data(visData)
+            .data(filteredData)
             .join("path")
             .attr("class", "myPath")
             .attr("d", path)
